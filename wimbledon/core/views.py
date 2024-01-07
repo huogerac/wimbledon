@@ -17,8 +17,8 @@ from .service import tournaments_svc
 router = Router()
 
 
-@router.get("/tournaments/", response=TournamentSchema)
-def get_tournament(request, tournament: TournamentSchemaIn):
+@router.get("/tournaments/{tournament_id}", response=TournamentSchema)
+def get_tournament(request, tournament_id):
     # TODO:
     # new_tournament = tournaments_svc.add_tournament(tournament.description)
     return JsonResponse({})
@@ -40,6 +40,13 @@ def list_tournaments(request):
 def create_competitor(request, tournament_id, competitor: CompetitorSchemaIn):
     new_competitor = tournaments_svc.create_competitor(tournament_id, competitor.name)
     return JsonResponse(new_competitor)
+
+
+@router.get("/tournaments/{tournament_id}/competitor", response=CompetitorSchema)
+def list_competitors(request, tournament_id):
+    competitors = {}
+    #: TODO
+    return JsonResponse(competitors)
 
 
 @router.post("/tournaments/{tournament_id}/start", response=ListMatchesSchema)

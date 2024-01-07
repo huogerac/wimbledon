@@ -32,9 +32,9 @@ class MatchSchema(Schema):
     tournament_id: int
     level_number: int
     game_number: int
-    competitor1_id: Optional[int]
-    competitor2_id: Optional[int]
-    winner_id: Optional[int]
+    competitor1: Optional[CompetitorSchema]
+    competitor2: Optional[CompetitorSchema]
+    winner: Optional[CompetitorSchema]
 
 
 class ListMatchesSchema(Schema):

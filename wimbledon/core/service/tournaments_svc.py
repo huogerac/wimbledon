@@ -1,4 +1,4 @@
-import random
+from django.db.models import Count, Max
 from ..models import Tournament, Competitor, Match
 
 
@@ -27,7 +27,6 @@ def start_tournament(tournament_id):
 
     nr_competitors = len(competitors)
     game_count = nr_competitors - 1
-    games = []
 
     # obtem level ## TODO!!!
     game_level = 1
@@ -73,4 +72,53 @@ def save_match_result(tournament_id, match_id, winner_competitor_id):
     competitor = Competitor.objects.get(id=winner_competitor_id)
     match.winner = competitor
     match.save()
+
+    prepare_next_level_matches(tournament_id)
     return match.to_dict_json()
+
+
+def prepare_next_level_matches(tournament_id):
+    matches_playing_by_level = (
+        Match.objects.values("level_number")
+        .filter(tournament_id=1)
+        .annotate(
+            games_total=Count("level_number"),
+            games_winners=Count("winner"),
+            last_game_number=Max("game_number"),
+        )
+        .order_by("level_number")
+    )
+
+    level_number = matches_playing_by_level[0].get("level_number")
+    games_total = matches_playing_by_level[0].get("games_total")
+    games_winners = matches_playing_by_level[0].get("games_winners")
+    last_game_number = matches_playing_by_level[0].get("games_winners")
+
+    all_games_with_winners = games_winners == games_total
+    if not all_games_with_winners:
+        return
+
+    # current level finished, let's create the next one
+    level_matches = (
+        Match.objects.select_related("competitor1")
+        .select_related("competitor2")
+        .select_related("winner")
+        .filter(tournament_id=1, level_number=level_number)
+        .order_by("level_number", "game_number")
+    )
+
+    last_game_number -= 1
+    level_number -= 1
+
+    while len(level_matches) > 0:
+        next_final, level_matches = level_matches[:2], level_matches[2:]
+        g1, g2 = next_final
+        new_match = Match(
+            tournament_id=tournament_id,
+            game_number=last_game_number,
+            level_number=level_number,
+            competitor1=g1.winner,
+            competitor2=g2.winner,
+        )
+        new_match.save()
+        last_game_number -= 1

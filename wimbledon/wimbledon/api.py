@@ -14,4 +14,4 @@ api = NinjaAPI(
 
 api.add_router("/", base_router, tags=["base"])
 api.add_router("/accounts/", accounts_router, tags=["accounts"])
-api.add_router("/core/", core_router, tags=["core"])  ## auth=django_auth,
+api.add_router("/core/", core_router, tags=["core"])  # auth=django_auth,

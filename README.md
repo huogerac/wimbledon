@@ -8,8 +8,12 @@ sequenceDiagram
 ## TODO
 
 - [x] salvar resultado
-- [ ] salvar resultado revisando prox. game/level
-- [ ] adicionar estado tournament
+- [x] salvar resultado revisando prox. game/level
+- [ ] escrever mais testes
+- [ ] mvp frontend para visualizar resultados
+- [ ] listar top 4
+- [ ] doc inicial
 - [ ] melhorar listar matches
 - [ ] listar tournament
+- [ ] adicionar estado tournament
 - [ ] remover accounts
