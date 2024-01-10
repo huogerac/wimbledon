@@ -1,6 +1,5 @@
 from django.db.models import Count, Max
 from django.db.utils import IntegrityError
-from django.db import DatabaseError, transaction
 
 from ..models import Tournament, Competitor, Match
 
@@ -22,7 +21,7 @@ def create_competitor(tournament_id, name):
         new_competitor.save()
         return new_competitor.to_dict_json()
 
-    except IntegrityError as error:
+    except IntegrityError:
         raise ValueError(f"'{name}' already exists for this tounament.")
 
 
