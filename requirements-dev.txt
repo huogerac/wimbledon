@@ -13,5 +13,4 @@ pytest-django==4.5.2
 ipython==8.16.1
 
 # CORS (para quando o frontend está em domínio diferente)
-
 django-cors-headers==4.3.0

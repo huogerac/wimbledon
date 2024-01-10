@@ -7,9 +7,9 @@ from ..accounts.views import router as accounts_router
 from ..core.views import router as core_router
 
 api = NinjaAPI(
-    csrf=True,
-    title="🥷 wimbledon",
-    description="The Ultimate Django and Vue Template",
+    csrf=False,
+    title="🏆 Wimbledon API",
+    description="Gestão de campeonado mata-mata",
 )
 
 api.add_router("/", base_router, tags=["base"])

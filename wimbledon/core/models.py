@@ -22,6 +22,9 @@ class Competitor(models.Model):
         Tournament, on_delete=models.CASCADE, related_name="competitors"
     )
 
+    class Meta:
+        unique_together = [["tournament", "name"]]
+
     def __str__(self):
         return f"{self.name}"
 

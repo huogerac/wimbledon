@@ -42,13 +42,12 @@ CSRF_TRUSTED_ORIGINS = config(
 )
 
 # CORS
-# if DEBUG:
-#     CORS_ALLOW_CREDENTIALS = config("CORS_ALLOW_CREDENTIALS", default=False, cast=bool)
-#     CORS_ALLOWED_ORIGINS = config(
-#         "CSRF_TRUSTED_ORIGINS",
-#         default="http://localhost:3000",
-#         cast=Csv(),
-#     )
+CORS_ALLOW_CREDENTIALS = config("CORS_ALLOW_CREDENTIALS", default=False, cast=bool)
+CORS_ALLOWED_ORIGINS = config(
+    "CSRF_TRUSTED_ORIGINS",
+    default="http://localhost:3000",
+    cast=Csv(),
+)
 
 # Application definition
 DJANGO_APPS = [
@@ -66,8 +65,7 @@ THIRD_PARTY_APPS = [
 ]
 
 # CORS
-# if DEBUG:
-#     THIRD_PARTY_APPS += ['corsheaders']
+THIRD_PARTY_APPS += ["corsheaders"]
 
 LOCAL_APPS = [
     "wimbledon.base",
@@ -89,9 +87,8 @@ MIDDLEWARE = [
 ]
 
 # CORS
-# if DEBUG:
-#     before_common = MIDDLEWARE.index("django.middleware.common.CommonMiddleware")
-#     MIDDLEWARE.insert(before_common, "corsheaders.middleware.CorsMiddleware")
+before_common = MIDDLEWARE.index("django.middleware.common.CommonMiddleware")
+MIDDLEWARE.insert(before_common, "corsheaders.middleware.CorsMiddleware")
 
 ROOT_URLCONF = "wimbledon.wimbledon.urls"
 
