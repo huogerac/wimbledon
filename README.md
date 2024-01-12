@@ -9,19 +9,22 @@ sequenceDiagram
 
 - [✅] Cadastro de novos torneios  ([POST] /tournament)
 - [✅] Cadastro dos competidores   ([POST] /tournament/<id>/competitor)
+- [✅] Listar💡                    ([GET]  /tournament/<id>/competitor)
 - [✅] Listagem de partidas🚨      ([GET]  /tournament/<id>/match)
 - [✅] Iniciar torneio💡🚨         ([POST] /tournament/<id>/start)         
 - [✅] Salvar resultado partidas🚨 ([POST] /tournament/<id>/match/<id>)
-- [  ] Exibição do TOP4            ([GET]  /tournament/<id>/result)
+- [✅] Exibição do TOP4            ([GET]  /tournament/<id>/result)
 
 ## Próximos passos
-- [  ] Terminar API de resultado
+- [✅] Terminar API de resultado
 - [✅] Código retorno 400, 201 para criação
-- [  ] Revisar se precisa ter um jogo a mais para definir 3o e 4o lugar
-- [  ] Número de competidores impar passam para próxima rodada
-- [  ] Fazer testes dos fluxos alternativos
+- [✅] Revisar se precisa ter um jogo a mais para definir 3o e 4o lugar
+- [✅] Número de competidores impar passam para próxima rodada
+- [✅] Fazer testes dos fluxos alternativos
+- [  ] Bug 6 jogadores que na fase dois temos numero impar de competidores
 - [  ] Revisar/Melhorar organização do projeto/código
 - [  ] Colocar as consultas em manager
+- [  ] Limpar projeto
 - [  ] Criar documentação
 
 
@@ -30,9 +33,9 @@ sequenceDiagram
 - [x] salvar resultado
 - [x] salvar resultado revisando prox. game/level
 - [x] mvp frontend para visualizar resultados
-- [ ] escrever mais testes
+- [x] escrever mais testes
 - [ ] tipar os tipos parametros, ex. tournament_id esta string
-- [ ] listar top 4
+- [x] listar top 4
 - [ ] doc inicial
 - [ ] melhorar listar matches
 - [ ] listar tournament

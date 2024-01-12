@@ -42,6 +42,8 @@ class Match(models.Model):
     )
     game_number = models.IntegerField(blank=True, null=True)
     level_number = models.IntegerField(blank=True, null=True)
+    game_extra = models.BooleanField(default=False)
+    auto_win = models.BooleanField(default=False)
     competitor1 = models.ForeignKey(
         Competitor,
         models.SET_NULL,

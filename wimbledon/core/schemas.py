@@ -27,6 +27,10 @@ class CompetitorSchemaIn(Schema):
     name: str
 
 
+class ListCompetitorsSchema(Schema):
+    competitors: List[CompetitorSchema]
+
+
 class MatchSchema(Schema):
     id: int
     tournament_id: int

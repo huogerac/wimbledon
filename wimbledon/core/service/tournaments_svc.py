@@ -25,6 +25,13 @@ def create_competitor(tournament_id, name):
         raise ValueError(f"'{name}' already exists for this tounament.")
 
 
+def list_competitors(tournament_id, order_by="name"):
+    competitors = Competitor.objects.filter(tournament_id=tournament_id).order_by(
+        order_by
+    )
+    return [c.to_dict_json() for c in competitors]
+
+
 def start_tournament(tournament_id, seed="?"):
     tournament = Tournament.objects.get(id=tournament_id)
     competitors = tournament.competitors.all().order_by(seed)
@@ -43,6 +50,19 @@ def start_tournament(tournament_id, seed="?"):
 
     while competitors:
         next_game, competitors = competitors[:2], competitors[2:]
+        if len(next_game) == 1:
+            new_match = Match(
+                tournament=tournament,
+                game_number=0,
+                level_number=game_level,
+                competitor1=next_game[0],
+                competitor2=next_game[0],
+                winner=next_game[0],
+                auto_win=True,
+            )
+            new_match.save()
+            continue
+
         p1, p2 = next_game
         new_match = Match(
             tournament=tournament,
@@ -126,4 +146,33 @@ def prepare_next_level_matches(tournament_id):
             competitor2=g2.winner,
         )
         new_match.save()
+
+        if level_number == 1 and len(level_matches) == 0:
+            g1_loser = g1.competitor2 if g1.winner == g1.competitor1 else g1.competitor1
+            g2_loser = g2.competitor2 if g2.winner == g2.competitor1 else g2.competitor1
+            new_match = Match(
+                tournament_id=tournament_id,
+                game_number=last_game_number + 100,
+                level_number=level_number,
+                game_extra=True,
+                competitor1=g1_loser,
+                competitor2=g2_loser,
+            )
+            new_match.save()
+
         last_game_number -= 1
+
+
+def list_competitors_top4(tournament_id):
+    top_matches = (
+        Match.objects.select_related("competitor1")
+        .select_related("competitor2")
+        .select_related("winner")
+        .filter(tournament_id=tournament_id, level_number=1)
+        .order_by("level_number", "game_number")
+    )
+    g1, g2 = top_matches
+    g1_vice = g1.competitor2 if g1.winner == g1.competitor1 else g1.competitor1
+    g2_vice = g2.competitor2 if g2.winner == g2.competitor1 else g2.competitor1
+    list_top4 = [g1.winner, g1_vice, g2.winner, g2_vice]
+    return [m.to_dict_json() for m in list_top4]
