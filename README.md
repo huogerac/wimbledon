@@ -1,58 +1,10 @@
-# apagar
-
-
-## TODO
-
-- [x] salvar resultado
-- [x] salvar resultado revisando prox. game/level
-- [x] mvp frontend para visualizar resultados
-- [x] escrever mais testes
-- [ ] tipar os tipos parametros, ex. tournament_id esta string
-- [x] listar top 4
-- [x] doc inicial
-- [ ] Poetry
-- [ ] Deploy Fly.io
-- [ ] Adicionar o output da solucao 1
-- [ ] melhorar listar matches
-- [ ] caso de marcar torneio como completo
-- [ ] listar tournament
-- [x] remover accounts
-- [ ] adicionar estado tournament
-
-
-
-## Próximos passos
-- [✅] Terminar API de resultado
-- [✅] Código retorno 400, 201 para criação
-- [✅] Revisar se precisa ter um jogo a mais para definir 3o e 4o lugar
-- [✅] Número de competidores impar passam para próxima rodada
-- [✅] Fazer testes dos fluxos alternativos
-- [  ] Teste final com 17 jogadores
-- [  ] Criar documentação
-- [  ] Revisar/Melhorar organização do projeto/código
-- [  ] Limpar projeto
-- [  ] Bug 6 jogadores que na fase dois temos numero impar de competidores
-- [  ] Nao permitir incluir novos competidores qdo tem matches (inicializado)
-- [  ] Testar com docker e postgres
-- [  ] Deploy Fly.io
-
-tour = Tournament.objects.all().first()
-
-player = 'Alex Eala|Diana Shnaider|Polina Kudermetova|Kristina Dmitruk|Germany Mara Guth|John Doe|Oliva Galvones|Player One|Player Two|Rafael Nadal|Roger Federer|Leo Borg|Bruno Kuzuhara|Daniel Aguilar|Ethan Quinn|Tarantino'.split('|')
-
-for name in players:
-    tournaments_svc.create_competitor(tour.id, name)
-
-
-
-
-
-# Desafio Mata-Mata
+# 🏆 Desafio Mata-Mata
 
 Bem-vindo a documentação da solução feita em Janeiro 2024 por Roger Camargo.
 Espero que gostem! Ficarei feliz em responder qualquer pergunta!
 
-- Fonte: TODO: adicionar link repo
+- Fonte: [https://github.com/huogerac/wimbledon](https://github.com/huogerac/wimbledon)
+- API: [https://wimbledon.fly.dev/api/docs](https://wimbledon.fly.dev/api/docs)
 
 ## Funcionalidades
 
@@ -65,25 +17,28 @@ Espero que gostem! Ficarei feliz em responder qualquer pergunta!
 - [✅] Exibição do TOP4            ([GET]  /tournament/<id>/result)
 
 Legenda:
-- 💡 Fora da listagem minima do desafio
+- 💡 Fora da listagem mínima do desafio
 - 🚨 Por onde comecei
+
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0;"><iframe src="https://www.loom.com/embed/3ca2c06ba9d242a1b5f1d2a64276f504?sid=7a5f987d-6f71-455e-95f9-5d10f68fe28a" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 
 ## Como resolvi
 
 - ✅ #1 Uma versão inicial fora de frameworks & API
 - ❌ #2 Tentei utilizar meu [template Flask API](github.com/huogerac/cookiecutter-flask-openapi) como fundacao
-- ❌ #3 Tentei comecar um projeto FastAPI do Zero
-- ✅ #4 Comecei tudo de novo com Django (Calma! pode ser melhor que parece)
+- ❌ #3 Tentei começar um projeto FastAPI do Zero
+- ✅ #4 Comecei tudo de novo com Django (Calma! pode ser melhor que parece) 👈
 
 Notas:
-- No repositorio, tem a pasta .vscode com os plugins
+- No repositório, tem a pasta .vscode com os plugins
 
 ## ✅ #1 Solução sem framework, pensando na lógica do jogo apenas...
 
 Dado um campeonato com 8 jogadores, conseguimos montar uma árvore de jogos até a final que define o campeão
 
 ```mermaid
-flowchart TB
+flowchart BT
     p1--> 7:p1
     p2--> 7:p1
     p3--> 6:p3
@@ -102,7 +57,7 @@ flowchart TB
     2:p5--> 1:p1
 ```
 
-Com uma solução bem inicial utilizando este conceito, conseguimos montar toda árvore de jogos:
+Com uma solução bem inicial utilizando este conceito, conseguimos montar toda a árvore de jogos:
 
 ```python
 class Tree:
@@ -166,12 +121,12 @@ def start_tournament(tournament_id, seed=42):
     return final
 ```
 
-Com basicamente este conceito, é possível montar a ávore de jogos. É claro, neste momento ainda falta os casos alternativos, como um número impar de jogadores. Mas com o salvar os resultados, vamos conseguir listar os jogos e os finalistas...
-Enfim, foi uma prova de conceito para sentir um caminho da solução!
+Com basicamente este conceito, é possível montar a árvore de jogos. É claro, neste momento ainda faltam os casos alternativos, como um número ímpar de jogadores. Mas com o salvar os resultados, vamos conseguir listar os jogos e os finalistas...
+Enfim, foi uma prova de conceito para sentir o caminho da solução!
 
 ## ❌ #2 Implementar uma API com Flask
 
-Uma com o rascunho da solucao, utilizei um [template Flask que fiz](), desta forma conseguiria gastar pouco tempo pensando na organizao, e principalmente na documentacao da API, algo que acredito ser muito importante! o CONTRATO da api ajuda todos que direta ou indiretamente vao utiliza-la.
+Uma vez com o rascunho da solução, utilizei o [template Flask que fiz](https://github.com/huogerac/cookiecutter-flask-openapi/), desta forma conseguiria gastar pouco tempo pensando na organização, e principalmente na documentação da API, algo que acredito ser muito importante! o CONTRATO da api ajuda todos que direta ou indiretamente vão utilizá-la.
 
 Minha ideia era focar na solução do problema primeiro, gerar valor implementando as principais funcionalidades do desafio ao invés de ficar configurando variáveis de ambiente para o teste, migrações, ORM etc...
 
@@ -199,13 +154,22 @@ Minha ideia era focar na solução do problema primeiro, gerar valor implementan
 │       └── 📦 users.py
 ```
 
-- Postgres
+Também estava pesquisando como utilizar o [`WITH RECURSIVE` do Postgres](https://www.postgresql.org/docs/current/queries-with.html#QUERIES-WITH-RECURSIVE) para tentar obter toda árvore dos jogos:
 
-PROBLEMA: Como já tem mais de 3 anos que não trabalho com Flask, este projeto não roda mais, Flask 1.1.4 conflita com SQLAlchemy. Mesmo com todas versões fixadas no requirements, não roda. Gastei horas tentando atualizar as bibliotecas e quando fiz rodar, a API do SQLAlchemy mudou um pouco. (ai um motivo para usar um Poetry/pip-tools)
+```SQL
+WITH RECURSIVE t(n) AS (
+    VALUES (1)
+  UNION ALL
+    SELECT n+1 FROM t WHERE n < 100
+)
+SELECT sum(n) FROM t;
+```
 
-ENFIM, parece que fazia mais sentido eu começar do zero ao invés de utilizar o template que esta bem quebrado!
+PROBLEMA: Como já tem mais de três anos que não trabalho com Flask, este projeto não roda mais, Flask 1.1.4 conflita com SQLAlchemy. Mesmo com todas as versões fixadas no requirements, não roda. Gastei horas tentando atualizar as bibliotecas e quando fiz rodar, a API do SQLAlchemy mudou um pouco. (um motivo para usar um Poetry/pip-tools)
 
-COMEÇAR DO ZERO? Bom, já que vou ter que configurar .dotenv, ORM, Migrações etc...Bom, acredito que faz mais sentido ir para um FastAPI, ainda mais que estou meio desatualizado o que mudou no Flask 2 e 3.
+ENFIM, parece que fazia mais sentido eu começar do zero ao invés de utilizar o template que está bem quebrado!
+
+COMEÇAR DO ZERO? Bom, já que vou ter que configurar .dotenv, ORM, Migrações etc...Bom, acredito que faz mais sentido ir para um FastAPI, ainda mais que estou meio desatualizado com o que mudou no Flask 2 e 3.
 
 ## ❌ #3 Implementar do zero uma API com FastAPI
 
@@ -218,32 +182,36 @@ Iniciei fazendo um TODO list:
 - Migrations
 - CLI
 
-PROBLEMA: Por mais que estava evoluindo rápido, estava fácil adicionar as coisas, documentação boa...já se passaram várias horas e NÃO ESTAVA FOCANDO no problema do campeonado! Parei um pouco a organização e comecei fazer a modelagem, tentei retornar as partidas, escrevendo alguns testes etc...
+PROBLEMA: Por mais que estivesse evoluindo rápido, estava fácil adicionar as coisas, documentação legal do FastAPI...já se passaram várias horas e NÃO ESTAVA FOCANDO no problema do campeonato! Parei um pouco a organização e comecei fazer a modelagem, tentei retornar as partidas, escrever alguns testes etc...
 Mas estava gastando muito tempo para entender as mudanças no SQLAlchemy mais novo. Coisas simples como `Players.query.order_by(Players.id.desc()).all()` não funcionavam de primeira!
 
-Dado que ainda estava faltando resolver problemas bem mais complexos, como a listagem dos 4 melhores, criar partidas com número impar de jogadores!
+Dado que ainda estava faltando resolver problemas bem mais complexos, como a listagem dos 4 melhores, criar partidas com número ímpar de jogadores!
 Meu tempo acabando e eu batendo cabeça com ORM e organização de projeto!
 
-DECIDI começar do zero novamente usando coisas da minha zona de conforto! focar no domínio da solução ao invés da nova API do ORM.
+**TODO:** Enviar o que consegui fazer com FastAPI
 
-Comecei com Django! CALMA! olhem com o olhar de investidor, acredito que o resultado foi melhor que eu esperava, em muito menos tempo as principais funcionalidades estavam prontas! com testes e pude resolver os casos alternativos utilizando TDD com zero esforco. 👇
+👉 DECIDI então começar do zero novamente usando coisas da minha zona de conforto! focar no domínio da solução ao invés da nova API do ORM.
+
+Comecei com Django! CALMA! olhem com o olhar de investidor, acredito que o resultado foi melhor que eu esperava, em muito menos tempo as principais funcionalidades estavam prontas! com testes e pude resolver os casos alternativos utilizando TDD com zero esforço de configuração. 👇
+
 
 ## ✅ #4 Tudo do zero com Django utilizando o template Djàvue...
 
-No começo deste ano contribui bastante para a versão 3 deste template, e achei que poderia utiliza-lo para me ajudar nesta entrega!
+No começo deste ano contribuí bastante para a versão 3 deste template, e achei que poderia utilizá-lo para me ajudar nesta entrega!
 
 Este projeto segue a organização do Djàvue que pode ser [acessada aqui](https://github.com/evolutio/djavue3). Mais informações pode ser vista nesta documentação criada por mim mesmo aqui: [https://djavue.org/](https://www.djavue.org/README_EN.html)
 
 
 ## Fundação
 
-- Gerenciador de pacotes
+- Gerenciador de pacotes (Poetry)
 - dotenv para facilitar rodar em diferentes ambientes, escolher com ou sem Docker etc...
-- API com documentacao automatica (swagger)
-- Linter e formatador de codigo (Flake8 e Black)
+- API com documentação automática (swagger)
+- Linter e formatador de código (Flake8 e Black)
 - Pytest
 - Docker para rodar tudo com 1 comando
 - CI com GitHub Actions
+- CD para deploy no Fly.io
 
 ## Domínio da solução
 
@@ -275,36 +243,36 @@ classDiagram
 
 - Git
 - 🐍 Python 3.11.x
-- Um terminal (de preferencia um terminal Linux, é para funcionar em um terminal WSL no Windows)
+- Um terminal (de preferência um terminal Linux, é para funcionar em um terminal WSL no Windows)
 
-Temos duas formas para **Rodar** escolha o sabor 🍨:
+Temos três formas para **Rodar** 🍨:
 - Sem Docker 📦: Apenas **Python** (usando sqlite)
-- Apenas Banco de dados usando 🐋 Docker
+- Apenas Banco de dados usando 🐋 Docker (melhor para debug)
 - Tudo usando Docker 🐋: **Docker** and **Docker compose**
 
 
-## Rodar local (min.dependencias) sem Docker 🦄
+## Rodar local (min.dependências) SEM Docker 🦄
 
-🌈 TIPS/TRICKS: Melhor utilizar Python 3.10 ou mais novo. Uma boa forma de gerenciar versoes de python é utilizar ferramentas como [Pyenv](https://github.com/pyenv/pyenv) ou [asdf](https://github.com/asdf-vm/asdf) 
+🌈 TIPS/TRICKS: Melhor utilizar Python 3.11 ou mais novo. Uma boa forma de gerenciar versões de python é utilizar ferramentas como [Pyenv](https://github.com/pyenv/pyenv) ou [asdf](https://github.com/asdf-vm/asdf) 
 
 Clonar e entrar na pasta do projeto
 
 ```shell
-git clone ...
+git clone https://github.com/huogerac/wimbledon.git
 cd wimbledon/
 ```
 
-Vamos agora criar um ambiente virtual Python e instalar as dependencias:
+Vamos agora criar um ambiente virtual Python e instalar as dependências:
 
 **AVISO**: Confirme que tem a versão correta do Python para este projeto
 
 ```shell
-poetry config virtualenvs.in-project true
+poetry config virtualenvs.in-project true    # cria o virtualenv na pasta .env
 poetry install
 ```
 
 - **IMPORTANTE**:
-Vamos precisar confirmar como que as variáveis de ambiente estão configuradas no arquivo `.env`. Temos que confirmar que as configurações para rodar local estão sem comentário:
+Vamos precisar confirmar como as variáveis de ambiente estão configuradas no arquivo `.env`, ou seja, precisamos garantir que a sessão 'Para uso local via virtualenv' estão sem comentário:
 
 ```shell
 DEBUG=True
@@ -331,12 +299,12 @@ DATABASE_URL=sqlite:///db_local.sqlite3
 # DATABASE_URL=postgres://posts:posts@postgres:5432/db_posts
 ```
 
-Agora, vamos criar as migracoes, ou seja, as tabelas inicias do projeto (com base nas definicoes dos models). Note que o Django já vem com alguns problemas resolvidos, então vamos ter umas tabelas a mais, como usuário e sessões. Pode parecer estranho para este projeto, mas no mundo real, não queremos qualquer pessoa enviando resultado dos jogos, logo vamos precisar de autenticao. 
+Agora, vamos criar as migrações, ou seja, as tabelas iniciais do projeto (com base nas definições dos models). Note que o Django já vem com alguns problemas resolvidos, então vamos ter umas tabelas a mais, como usuário e sessões. Pode parecer estranho para este projeto, mas no mundo real, não queremos qualquer pessoa enviando resultado dos jogos, logo vamos precisar de autenticação. 
 
-Nota: Neste momento, todos endpoints estão abertos, mas é bem fácil protegê-los
+**Nota:** Neste momento, todos endpoints estão abertos, mas é bem fácil protegê-los
 
 **IMPORTANTE:**
-- Sem Poetry, precisamos ativar o ambiente virtual, com Poetry vamos precisar ou rodar os comandos com `poetry run [coamando]` ou abrir o shell com `poetry shell` antes de digitar os comandos a seguir:
+- Como estamos utilizando Poetry, vamos precisar rodar os comandos com `poetry run [comando]` ou abrir o shell com `poetry shell` antes de digitar os comandos a seguir:
 
 ```shell
 ./manage.py migrate
@@ -384,8 +352,8 @@ Ou podemos Criar e iniciar um torneio com:
 ```python
 from wimbledon.core.services import tournaments_svc
 
-tourneio = Tournament.objects.create(description='Wimbledon 2024')
-tourneio.save()
+torneio = Tournament.objects.create(description='Wimbledon 2024')
+torneio.save()
 
 competidores = 'Alex|Diana|Polina|Kristina|Mara Guth|John Doe|Oliva||Rafael'.split('|')
 [tournaments_svc.create_competitor(torneio.id, name) for name in players]
@@ -402,9 +370,9 @@ tournaments_svc.list_matches(torneio.id)
 
 - Docker version >= 24.0.2 (in any S.O. you have)
 - Docker Compose version >= v2.18.1
-- Um terminal ou WSL no Windows
+- Um terminal Linux ou WSL no Windows
 
-Como a aplicação se comporta em tempo de execução é com base nas configurações do settings para um determinado ambiente seguindo o [12 factors](https://12factor.net/), desta forma, podemos conectar em um sqllite ou em Posgres, pode ser em modo DEBUG ou não. Estas configurações estão no arquivo .env
+Como a aplicação se comporta em tempo de execução é com base nas configurações do settings para um determinado ambiente seguindo o [12 factors](https://12factor.net/), desta forma, podemos conectar em um sqllite ou em Postgres, pode ser em modo DEBUG ou não. Estas configurações estão no arquivo .env
 
 Para utilizar Docker, vamos comentar as linhas para uso com virtualenv e DESCOMENTAR as linhas para uso com Docker:
 
@@ -433,7 +401,7 @@ POSTGRES_PASSWORD=posts
  DATABASE_URL=postgres://posts:posts@postgres:5432/db_posts
 ```
 
-Primeiramente, independente de qual diretório você está, veja se já existe algum container iniciado. De preferência, tente parar ou apagar os containers e forma a deixar a lista vazia.
+Primeiramente, independente de qual diretório você está, veja se já existe algum container iniciado. De preferência, tente parar ou apagar os containers e deixar a listagem vazia.
 
 ```shell
 docker ps
@@ -442,7 +410,7 @@ CONTAINER ID   IMAGE  COMMAND      CREATED       STATUS                PORTS
 ``` 
 
 👉 **INFO**:
-Se sua lista exibir algum container, você precisa fazaer um `docker stop [CONTAINER ID]`
+Se sua lista exibir algum container, você precisa fazer um `docker stop [CONTAINER ID]`
 
 
 Entre no diretório do projeto
@@ -457,7 +425,7 @@ Digite o comando para iniciar os containers em modo "detached"
 docker compose up -d
 ```
 
-Depois de baixar as camadas e fazer o "build" das imagens, digite novamente o comando `docker ps`, ele deverá listar dois containers: o backend e o banco de dados postgres rodando:
+Depois de baixar as camadas e fazer o "build" das imagens, digite novamente o comando `docker ps`, ele deverá listar dois containers: o backend e o banco de dados Postgres rodando:
 
 ```shell
 docker ps
@@ -483,7 +451,7 @@ services:
     ...
 
   postgres:
-    image: "postgres:15-alpine"
+    image: "postgres:14-alpine"
     ports:
       - 15432:5432
     expose:
@@ -500,17 +468,18 @@ services:
 
 👉 Abra seu navegador e acesse `http://localhost:8000`
 
-Você pode acessar o container **backend container** e digita os mesmos comandos utilizados sem docker, primeiro é necessário entrar dentro do container:
+Você pode acessar o container **backend container** e digitar os mesmos comandos utilizados sem docker, primeiro é necessário entrar dentro do container:
 
 ```shell
 docker compose exec -it backend bash
 ```
 
-Uma vez dentro do container, podemos digitar os comandos do Django como mostrado na sessão anterior (Rodar sem docker)
+Uma vez dentro do container, podemos digitar os comandos do Django como mostrado na seção anterior (Rodar sem docker)
 
 Use `CTRL+D` ou digite `exit` para fechar o terminal de dentro do container docker e voltar para o terminal do host.
 
 **Outras coisas que podemos fazer neste ponto:**
+
 - Use `docker compose exec -it backend [command]` para executar qualquer comando dentro do container 
 - Use `docker compose down` para parar todos os container
 - Use `docker compose logs -f backend` para ver os logs do container. Nota: se o container não iniciar, este comando pode ajudar a entender por que o container não iniciou.
@@ -528,6 +497,7 @@ classDiagram
     API *-- Schemas
     Services --> ORM
     ORM *-- Models
+    Models *-- Manager
 ```
 
 - **Cliente**: Qualquer coisa que faz chamadas HTTP para a API
@@ -580,5 +550,123 @@ Wimbledon
 
 Comece pelos testes! Neles devemos entender as regras existentes.
 Os testes estão divididos inicialmente em duas camadas:
-- Testes da **camada da API**: Onde validamos se um endpoint retorna 200 ou 201, se da erro 400 quando tem input inválido, ou seja, regras relacionadas ao contrado da API
-- Testes da **camada de SERVIÇO**: Onde validamos as regras de negócio, por exemplo, se podemos ter dos competidores com o mesmo nome dentro do mesmo torneio. Ou se podemos enviar resultado de uma partida para uma partida que já possue resultado.
+- Testes da **camada da API**: Onde é validado se um endpoint retorna 200 ou 201, se da erro 400 quando tem input inválido, ou seja, regras relacionadas ao contrato da API
+- Testes da **camada de SERVIÇO**: Onde é validado as regras de negócio, por exemplo, se podemos ter dois competidores com o mesmo nome dentro do mesmo torneio. Ou se podemos enviar resultado de uma partida para uma partida que já possui resultado.
+
+```shell
+core/tests/
+    ├── conftest.py
+    ├── test_api_01_novos_torneios.py           👉 Teste da API
+    ├── test_api_02_listar_torneios.py
+    ├── test_svc_01_novos_torneios.py           👉 Teste dos serviços
+    ├── test_svc_02_cadastro_competidores.py
+    ├── test_svc_03_iniciar_partidas.py
+    ├── test_svc_04_listar_partidas.py
+    ├── test_svc_05_cadastrar_resultados.py
+    └── test_svc_06_listar_top4.py
+
+```
+
+## TODO
+
+- [x] salvar resultado
+- [x] salvar resultado revisando prox. game/level
+- [x] mvp frontend para visualizar resultados
+- [x] escrever mais testes
+- [x] listar top 4
+- [x] remover accounts
+- [x] doc inicial
+- [x] Poetry
+- [x] Testar com docker e postgres
+- [x] Deploy Fly.io
+- [ ] Teste final com 17 jogadores
+- [ ] Tipar os tipos parâmetros, ex. tournament_id esta string
+- [ ] Melhorar listar matches
+- [ ] Caso de marcar torneio como completo
+- [ ] Listar tournament
+- [ ] Bug 6 jogadores que na fase dois temos numero ímpar de competidores
+- [ ] Nao permitir incluir novos competidores qdo tem matches (inicializado)
+- [ ] Adicionar o output da solucao 1
+
+
+## Testes
+
+```python
+
+from wimbledon.core.service import tournaments_svc
+
+tour = Tournament.objects.all().first()
+
+OU
+
+Tournament.objects.get(id=2)
+<Tournament: Wimbledon 2024>
+tour = _
+
+# Cadastra competidores
+players = 'Alex Eala|Diana Shnaider|Polina Kudermetova|Kristina Dmitruk|Germany Mara Guth|John Doe|Oliva Galvones|Player One|Player Two|Rafael Nadal|Roger Federer|Leo Borg|Bruno Kuzuhara|Daniel Aguilar|Ethan Quinn|Tarantino'.split('|')
+
+[tournaments_svc.create_competitor(tour.id, name) for name in players]
+
+[{'id': 2, 'tournament_id': 2, 'name': 'Alex Eala'},
+ {'id': 3, 'tournament_id': 2, 'name': 'Diana Shnaider'},
+ {'id': 4, 'tournament_id': 2, 'name': 'Polina Kudermetova'},
+ {'id': 5, 'tournament_id': 2, 'name': 'Kristina Dmitruk'},
+ {'id': 6, 'tournament_id': 2, 'name': 'Germany Mara Guth'},
+ {'id': 7, 'tournament_id': 2, 'name': 'John Doe'},
+ {'id': 8, 'tournament_id': 2, 'name': 'Oliva Galvones'},
+ {'id': 9, 'tournament_id': 2, 'name': 'Player One'},
+ {'id': 10, 'tournament_id': 2, 'name': 'Player Two'},
+ {'id': 11, 'tournament_id': 2, 'name': 'Rafael Nadal'},
+ {'id': 12, 'tournament_id': 2, 'name': 'Roger Federer'},
+ {'id': 13, 'tournament_id': 2, 'name': 'Leo Borg'},
+ {'id': 14, 'tournament_id': 2, 'name': 'Bruno Kuzuhara'},
+ {'id': 15, 'tournament_id': 2, 'name': 'Daniel Aguilar'},
+ {'id': 16, 'tournament_id': 2, 'name': 'Ethan Quinn'},
+ {'id': 17, 'tournament_id': 2, 'name': 'Tarantino'}]
+
+```
+
+
+```python
+
+import requests
+
+# Listar torneios
+requests.get(
+  "http://localhost:8000/api/core/tournaments/",
+  
+).json()
+
+# Cadastrar competidor
+requests.post(
+  "http://localhost:8000/api/core/tournaments/2/competitor",
+  json={"name":"Rod Laver"},
+).json()
+
+# Listar competidores
+requests.get(
+  "http://localhost:8000/api/core/tournaments/2/competitor",
+).json()
+
+# Listar partidas
+requests.get(
+  "http://localhost:8000/api/core/tournaments/2/match",
+).json()
+
+# Listar top 4
+requests.get(
+  "http://localhost:8000/api/core/tournaments/2/result",
+).json()
+
+```
+
+## ❌ Limitações/Problemas conhecidos
+
+- Depende o número de competidores, o gerador de matches vai falhar. Embora ele funcione para número ímpar de competidores, alguns números como 17 competidores, irá gerar um jogador que ficará sem jogar.
+- Alguns endpoints da API estão com tratamento de erros, mas vários estão sem
+- Podemos melhorar a tipagem dos dados na camada da API e de serviço, por exemplo, dizer que id é int
+- Melhorar a padronização, na api temos tournaments no plural e match no singular
+- Escrever mais testes para cobrir mais casos alternativos
+- Falta mais tratamento de 404
+- O método que calcula o 'level' do jogo falha dependendo do número de participantes. E está usando uma lógica ruim

@@ -39,8 +39,13 @@ def list_tournaments(request):
 
 @router.post("/tournaments/{tournament_id}/competitor", response=CompetitorSchema)
 def create_competitor(request, tournament_id, competitor: CompetitorSchemaIn):
-    new_competitor = tournaments_svc.create_competitor(tournament_id, competitor.name)
-    return JsonResponse(new_competitor)
+    try:
+        new_competitor = tournaments_svc.create_competitor(
+            tournament_id, competitor.name
+        )
+        return JsonResponse(new_competitor, status=201)
+    except ValueError as error:
+        return JsonResponse({"message": str(error)}, status=422)
 
 
 @router.get("/tournaments/{tournament_id}/competitor", response=ListCompetitorsSchema)
@@ -52,7 +57,7 @@ def list_competitors(request, tournament_id):
 @router.post("/tournaments/{tournament_id}/start", response=ListMatchesSchema)
 def start_tournament(request, tournament_id):
     matches = tournaments_svc.start_tournament(tournament_id)
-    return JsonResponse({"matches": matches})
+    return JsonResponse({"matches": matches}, status=201)
 
 
 @router.get("/tournaments/{tournament_id}/match", response=ListMatchesSchema)
@@ -66,7 +71,7 @@ def save_match_result(request, tournament_id, match_id, winner_competitor_id: in
     match = tournaments_svc.save_match_result(
         tournament_id, match_id, winner_competitor_id
     )
-    return JsonResponse(match)
+    return JsonResponse(match, status=201)
 
 
 @router.get("/tournaments/{tournament_id}/result", response=ListCompetitorsSchema)

@@ -47,6 +47,8 @@ def start_tournament(tournament_id, seed="?"):
         game_level = 3
     elif nr_competitors > 8 and nr_competitors <= 16:
         game_level = 4
+    elif nr_competitors > 16 and nr_competitors <= 32:
+        game_level = 5
 
     while competitors:
         next_game, competitors = competitors[:2], competitors[2:]
@@ -171,6 +173,13 @@ def list_competitors_top4(tournament_id):
         .filter(tournament_id=tournament_id, level_number=1)
         .order_by("level_number", "game_number")
     )
+    if not top_matches:
+        return []
+
+    if top_matches[0].level_number != 1:
+        return []
+
+    print(top_matches)
     g1, g2 = top_matches
     g1_vice = g1.competitor2 if g1.winner == g1.competitor1 else g1.competitor1
     g2_vice = g2.competitor2 if g2.winner == g2.competitor1 else g2.competitor1
