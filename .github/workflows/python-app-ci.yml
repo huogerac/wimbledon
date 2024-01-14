@@ -31,17 +31,26 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: "3.11"
-          cache: pip
 
-      - name: Install dependencies (using requirements)
+      - name: Install poetry
         run: |
-          pip install poetry
-          poetry install --no-interaction --no-root
+          python -m pip install poetry==1.6
+          python -m poetry config virtualenvs.in-project true
+
+      - name: Cache the virtualenv
+        uses: actions/cache@v2
+        with:
+          path: ./.venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install dependencies (using poetry)
+        run: |
+          python -m poetry install --no-interaction
 
       - name: Run Python Linter
-        run: poetry run flake8
+        run: python -m poetry run flake8
 
       - name: Run backend Tests
         env:
           DATABASE_URL: postgres://postgres:db_test_pwd_ci@localhost:5432/db_test
-        run: poetry run pytest --cache-clear
+        run: python -m poetry run pytest --cache-clear
