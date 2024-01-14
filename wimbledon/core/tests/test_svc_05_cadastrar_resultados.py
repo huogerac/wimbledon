@@ -67,7 +67,8 @@ def test_deve_salvar_resultado_e_gerar_final_e_semi_final(tournament_mock):
     assert game2.winner.id == p3.get("id")
     # Parte 2
     assert game1.winner.id == p1.get("id")
-    assert game101.winner.id == p2.get("id")   # 3o. lugar
+    assert game101.winner.id == p2.get("id")  # 3o. lugar
+
 
 @pytest.mark.django_db
 def test_deve_salvar_resultado_fase2_com_6_jogadores(tournament_mock):

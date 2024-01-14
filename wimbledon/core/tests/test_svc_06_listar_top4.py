@@ -30,7 +30,9 @@ def test_deve_listar_top4_com_4_competidores(tournament_mock):
     # Parte 1
     tournaments_svc.save_match_result(torneio.id, game3.id, p1.get("id"))
     tournaments_svc.save_match_result(torneio.id, game2.id, p3.get("id"))
-    game_1_e_2_lugar, game_3_e_4_lugar = Match.objects.all().order_by('level_number', 'game_number')[:2]
+    game_1_e_2_lugar, game_3_e_4_lugar = Match.objects.all().order_by(
+        "level_number", "game_number"
+    )[:2]
 
     tournaments_svc.save_match_result(torneio.id, game_1_e_2_lugar.id, p1.get("id"))
     tournaments_svc.save_match_result(torneio.id, game_3_e_4_lugar.id, p2.get("id"))

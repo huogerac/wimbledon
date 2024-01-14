@@ -21,7 +21,9 @@ Legenda:
 - 🚨 Por onde comecei
 
 
-<div style="position: relative; padding-bottom: 56.25%; height: 0;"><iframe src="https://www.loom.com/embed/3ca2c06ba9d242a1b5f1d2a64276f504?sid=7a5f987d-6f71-455e-95f9-5d10f68fe28a" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+### 🎥 ** VÍDEO 1:** Apresentação da API e do funcionamento
+- 👉 [https://www.loom.com/share/3ca2c06ba9d242a1b5f1d2a64276f504](https://www.loom.com/share/3ca2c06ba9d242a1b5f1d2a64276f504)
+
 
 ## Como resolvi
 
@@ -32,6 +34,11 @@ Legenda:
 
 Notas:
 - No repositório, tem a pasta .vscode com os plugins
+
+
+### 🎥 ** VÍDEO 2:** As etapas até chegar na solução
+- 👉 [https://www.loom.com/share/b3e4dfdf4669464fb3a835bd0218d014](https://www.loom.com/share/b3e4dfdf4669464fb3a835bd0218d014)
+
 
 ## ✅ #1 Solução sem framework, pensando na lógica do jogo apenas...
 
@@ -213,6 +220,10 @@ Este projeto segue a organização do Djàvue que pode ser [acessada aqui](https
 - CI com GitHub Actions
 - CD para deploy no Fly.io
 
+### 🎥 ** VÍDEO 3:** Visão geral da solução
+- 👉 [https://www.loom.com/share/0bd3730b1a894d8588c0620ac1632469](https://www.loom.com/share/0bd3730b1a894d8588c0620ac1632469)
+
+
 ## Domínio da solução
 
 ```mermaid
@@ -230,7 +241,7 @@ classDiagram
     class Match{
         -game_number
         -game_extra
-        -game_extra
+        -auto_winner
     }
     class Competitor{
         -name

@@ -27,5 +27,6 @@ coverage.xml
 .pytest_cache
 .hypothesis
 
+frontend/
 fly.toml
 
