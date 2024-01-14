@@ -274,7 +274,7 @@ classDiagram
 ## Requisitos
 
 - Git
-- 🐍 Python +3.9
+- 🐍 Python 3.11.x
 - Um terminal (de preferencia um terminal Linux, é para funcionar em um terminal WSL no Windows)
 
 Temos duas formas para **Rodar** escolha o sabor 🍨:
@@ -296,13 +296,11 @@ cd wimbledon/
 
 Vamos agora criar um ambiente virtual Python e instalar as dependencias:
 
-⚠️ **warning**
-Nao esqueca de ativar o ambiente (`source .venv/bin/activate`)
+**AVISO**: Confirme que tem a versão correta do Python para este projeto
 
 ```shell
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements-dev.txt
+poetry config virtualenvs.in-project true
+poetry install
 ```
 
 - **IMPORTANTE**:
@@ -336,6 +334,9 @@ DATABASE_URL=sqlite:///db_local.sqlite3
 Agora, vamos criar as migracoes, ou seja, as tabelas inicias do projeto (com base nas definicoes dos models). Note que o Django já vem com alguns problemas resolvidos, então vamos ter umas tabelas a mais, como usuário e sessões. Pode parecer estranho para este projeto, mas no mundo real, não queremos qualquer pessoa enviando resultado dos jogos, logo vamos precisar de autenticao. 
 
 Nota: Neste momento, todos endpoints estão abertos, mas é bem fácil protegê-los
+
+**IMPORTANTE:**
+- Sem Poetry, precisamos ativar o ambiente virtual, com Poetry vamos precisar ou rodar os comandos com `poetry run [coamando]` ou abrir o shell com `poetry shell` antes de digitar os comandos a seguir:
 
 ```shell
 ./manage.py migrate
@@ -575,3 +576,9 @@ Wimbledon
         └── wsgi.py
 ```
 
+# Entendendo o negócio
+
+Comece pelos testes! Neles devemos entender as regras existentes.
+Os testes estão divididos inicialmente em duas camadas:
+- Testes da **camada da API**: Onde validamos se um endpoint retorna 200 ou 201, se da erro 400 quando tem input inválido, ou seja, regras relacionadas ao contrado da API
+- Testes da **camada de SERVIÇO**: Onde validamos as regras de negócio, por exemplo, se podemos ter dos competidores com o mesmo nome dentro do mesmo torneio. Ou se podemos enviar resultado de uma partida para uma partida que já possue resultado.

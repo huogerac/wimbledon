@@ -1,6 +1,9 @@
-FROM python:3.10-slim
+FROM python:3.11-slim
 
 WORKDIR /code
+
+ENV POETRY_VIRTUALENVS_CREATE=false \
+    POETRY_CACHE_DIR='/var/cache/pypoetry'
 
 # Install basic SO and Python
 RUN apt-get update --fix-missing \
@@ -21,10 +24,9 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh && \
 
 #### Prepare BACKEND Django API
 
-COPY requirements.txt ./
-COPY requirements-dev.txt ./
-
-RUN pip install -r requirements-dev.txt
+COPY pyproject.toml ./
+RUN pip install poetry
+RUN poetry install --no-dev
 
 ENV PYTHONUNBUFFERED=1 
 ENV PYTHONDONTWRITEBYTECODE=1
