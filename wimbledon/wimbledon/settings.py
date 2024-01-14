@@ -69,7 +69,6 @@ THIRD_PARTY_APPS += ["corsheaders"]
 
 LOCAL_APPS = [
     "wimbledon.base",
-    "wimbledon.accounts",
     "wimbledon.core",
 ]
 
@@ -109,8 +108,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "wimbledon.wimbledon.wsgi.application"
-
-AUTH_USER_MODEL = "accounts.User"
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases

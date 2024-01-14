@@ -2,8 +2,6 @@ FROM python:3.10-slim
 
 WORKDIR /code
 
-
-
 # Install basic SO and Python
 RUN apt-get update --fix-missing \
     && apt-get install -y --no-install-recommends \
@@ -41,6 +39,4 @@ COPY . ./
 
 EXPOSE 8000
 
-
 CMD ["gunicorn", "--bind", ":8000", "--workers", "1", "wimbledon.wimbledon.wsgi"]
-

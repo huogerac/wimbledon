@@ -2,7 +2,7 @@ import os
 from django.db import connection
 from django.http import JsonResponse
 
-from ninja import Router, Schema
+from ninja import Router
 
 router = Router()
 
