@@ -122,13 +122,13 @@
           <span v-if="top4.length > 0 && top4[0].id == competitor.id"
             >🏅 (1o.)</span
           >
-          <span v-if="top4.length > 0 && top4[1].id == competitor.id"
+          <span v-if="top4.length > 1 && top4[1].id == competitor.id"
             >🥈 (2o.)</span
           >
-          <span v-if="top4.length > 0 && top4[2].id == competitor.id"
+          <span v-if="top4.length > 2 && top4[2].id == competitor.id"
             >🥉 (3o.)</span
           >
-          <span v-if="top4.length > 0 && top4[3].id == competitor.id">
+          <span v-if="top4.length > 3 && top4[3].id == competitor.id">
             (4o.)</span
           >
         </td>

@@ -149,7 +149,23 @@ def prepare_next_level_matches(tournament_id):
         )
         new_match.save()
 
+        if len(level_matches) == 1:
+            new_match = Match(
+                tournament_id=tournament_id,
+                game_number=0,
+                level_number=level_number,
+                competitor1=level_matches[0].winner,
+                competitor2=level_matches[0].winner,
+                winner=level_matches[0].winner,
+                auto_win=True,
+            )
+            new_match.save()
+            level_matches = []
+            continue
+
         if level_number == 1 and len(level_matches) == 0:
+            if g1.auto_win or g2.auto_win:
+                continue
             g1_loser = g1.competitor2 if g1.winner == g1.competitor1 else g1.competitor1
             g2_loser = g2.competitor2 if g2.winner == g2.competitor1 else g2.competitor1
             new_match = Match(
@@ -166,22 +182,25 @@ def prepare_next_level_matches(tournament_id):
 
 
 def list_competitors_top4(tournament_id):
+    # TODO: Não retorna os 4 ganhadores dependendo o nro de competidores
     top_matches = (
         Match.objects.select_related("competitor1")
         .select_related("competitor2")
         .select_related("winner")
         .filter(tournament_id=tournament_id, level_number=1)
+        .filter(winner__isnull=False)
         .order_by("level_number", "game_number")
     )
     if not top_matches:
         return []
 
-    if top_matches[0].level_number != 1:
-        return []
-
-    print(top_matches)
-    g1, g2 = top_matches
-    g1_vice = g1.competitor2 if g1.winner == g1.competitor1 else g1.competitor1
-    g2_vice = g2.competitor2 if g2.winner == g2.competitor1 else g2.competitor1
-    list_top4 = [g1.winner, g1_vice, g2.winner, g2_vice]
+    if len(top_matches) == 1:
+        g1 = top_matches[0]
+        g1_vice = g1.competitor2 if g1.winner == g1.competitor1 else g1.competitor1
+        list_top4 = [g1.winner, g1_vice]
+    else:
+        g1, g2 = top_matches
+        g1_vice = g1.competitor2 if g1.winner == g1.competitor1 else g1.competitor1
+        g2_vice = g2.competitor2 if g2.winner == g2.competitor1 else g2.competitor1
+        list_top4 = [g1.winner, g1_vice, g2.winner, g2_vice]
     return [m.to_dict_json() for m in list_top4]

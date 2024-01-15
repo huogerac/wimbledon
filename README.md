@@ -161,6 +161,8 @@ Minha ideia era focar na solução do problema primeiro, gerar valor implementan
 │       └── 📦 users.py
 ```
 
+[Post que fiz com relação a organização de projetos Flask](https://huogerac.hashnode.dev/estrutura-e-organizacao-de-pastas-em-projetos-flask)
+
 Também estava pesquisando como utilizar o [`WITH RECURSIVE` do Postgres](https://www.postgresql.org/docs/current/queries-with.html#QUERIES-WITH-RECURSIVE) para tentar obter toda árvore dos jogos:
 
 ```SQL
